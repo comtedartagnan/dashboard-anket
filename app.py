@@ -214,18 +214,23 @@ for plot in sub_dict.values():
 #
 #        )
 dus, bec, mot=st.tabs(['Düşünceler', 'Beceri ve Hazır Bulunuşluk Analizi','Motivasyon - İsteklilik'])
-
+dusunceler_sorulari = [i.split('[')[1][:-1] for i in  dusunceler.columns]
+motivasyon_sorulari = [i.split('[')[1][:-1] for i in  motivasyon.columns]
+beceri_sorulari = [i.split('[')[1][:-1] for i in  beceri.columns]
 with dus:
     st.header('')
     st.image("https://github.com/comtedartagnan/dashboard-anket/blob/main/plots/dusunceler.png?raw=true")
+    st.write(dusunceler_sorulari)
 
 with bec:
     st.header('')
     st.image("https://github.com/comtedartagnan/dashboard-anket/blob/main/plots/beceri.png?raw=true")
+    st.write(beceri_sorulari)
 
 with mot:
     st.header('')
     st.image("https://github.com/comtedartagnan/dashboard-anket/blob/main/plots/motivasyon.png?raw=true")
+    st.write(motivasyon_sorulari)
 
 #from PIL import Image
 #if sub_selection.equals(dusunceler):
