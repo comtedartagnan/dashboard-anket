@@ -15,9 +15,10 @@ st.set_page_config(page_title='Dashboard',
 
 @st.cache
 def get_data_from_excel():
-    df = pd.read_excel(io='dataset.xlsx',
-                    engine='openpyxl', sheet_name='Sheet1',
-                    )
+    #df = pd.read_excel(io='dataset.xlsx',
+    #                engine='openpyxl', sheet_name='Sheet1',
+    #                )
+    df = pd.read_csv('dataset.csv')
     df.rename(columns={'1-Yaşınız':'Yaş','2-Cinsiyetiniz':'Cinsiyet',
                     '3-Eğitim düzeyiniz':'Eğitim Düzeyi', '5-Hemşirelik meslek yılınız':'Hemşirelik meslek yılı'.title(),
                     '6-Okul sağlığı hemşiresi olarak mesleki yılınız':'Okul sağlığı hemşiresi olarak mesleki yılı'.title(),
