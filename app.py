@@ -159,49 +159,7 @@ sub_dict = {'Düşünceler':dusunceler, 'Beceri ve Hazır Bulunuşluk Analizi':b
 #sub_selection = sub_dict[subs]
 
 #@st.cache
-def plotter(sub_selection):
-    if sub_selection.equals(dusunceler):
-        fig, axes = plt.subplots(3,5, figsize=(25,20))
-        for i, ax in zip(range(13), axes.flat):
-            sns.histplot(ax=ax, x=dusunceler.iloc[:,i], hue=dusunceler.iloc[:,i],legend=False)
-            ax.set_title(dusunceler.iloc[:,i].name.split('[')[1][:-1], wrap=True, loc='center')
-            ax.set(xlabel=None,ylabel='Adet')
-            ax.tick_params(axis='x', rotation=90)
-        fig.subplots_adjust(wspace=5, hspace=1, )
-        fig.delaxes(axes[2][3])
-        fig.delaxes(axes[2][4])
 
-        #plt.subplots_adjust(left=0.125, right=0.9, top=0.9, wspace=0.2, hspace=0.25)
-
-        fig.tight_layout()
-        #plt.rcParams['figure.constrained_layout.use'] = True
-        #plt.savefig('plots\\dusunceler.png', dpi=100)
-    elif sub_selection.equals(beceri):
-        fig, axes = plt.subplots(3,5, figsize=(25,20))
-        for i, ax in zip(range(13), axes.flat):
-            sns.histplot(ax=ax, x=beceri.iloc[:,i], hue=beceri.iloc[:,i], legend=False)
-            ax.set_title(beceri.iloc[:,i].name.split('[')[1][:-1], wrap=True, loc='center')
-            ax.set(xlabel=None, ylabel='Adet')
-            ax.tick_params(axis='x', rotation=90)
-        fig.delaxes(axes[2][3])
-        fig.delaxes(axes[2][4])
-        fig.tight_layout()
-        #plt.savefig('plots\\beceri.png')
-    elif sub_selection.equals(motivasyon):
-        fig, axes = plt.subplots(3,3, figsize=(25,20))
-        for i, ax in zip(range(7), axes.flat):
-            sns.histplot(ax=ax, x=motivasyon.iloc[:,i], hue=motivasyon.iloc[:,i], legend=False)
-            ax.set_title(motivasyon.iloc[:,i].name.split('[')[1][:-1], wrap=True, loc='center')
-            ax.set(xlabel=None, ylabel='Adet')
-            ax.tick_params(axis='x', rotation=90)
-        fig.delaxes(axes[2][2])
-        fig.delaxes(axes[2][1])
-        fig.tight_layout()
-        #plt.savefig('plots\\motivasyon.png')
-
-
-for plot in sub_dict.values():
-    plotter(plot)
 
 
 #def download_button(url):
