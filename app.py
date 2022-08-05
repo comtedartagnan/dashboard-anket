@@ -1,5 +1,7 @@
-from re import sub
+from re import L, sub
+from textwrap import wrap
 from tokenize import group
+from trace import Trace
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -71,7 +73,6 @@ left_col, right_col = st.columns(2)
 with left_col:
     st.subheader('Yaş Dağılımı:')
     st.plotly_chart(fig_age_dist)
-    st.markdown('---') #if ekle
 
 
 
@@ -79,6 +80,8 @@ with left_col:
 with right_col:
     st.subheader('Cinsiyet Dağılımı:')
     st.plotly_chart(fig_gender_dist)
+
+st.markdown('---')
 
 d_left_col, d_right_col = st.columns(2)
 
@@ -114,6 +117,9 @@ with k_right_col:
     #st.subheader('')
     st.plotly_chart(fig_occ_period)
 
+st.markdown('---')
+
+
 m_left_col, m_mid_col, m_right_col = st.columns(3)
 
 
@@ -121,6 +127,7 @@ fig_edu_choice = px.pie(df, names='11-Aşağıdaki eğitim yöntemlerinden hangi
 
 with m_left_col:
     #st.write(df.columns)
+
     st.subheader('Tercih Edilen Eğitim Yöntemi:')
     st.plotly_chart(fig_edu_choice)
 
@@ -139,26 +146,28 @@ st.markdown('---')
 st.header('# ')
 sub_dict = {'Düşünceler':dusunceler, 'Beceri ve Hazır Bulunuşluk Analizi':beceri,
             'Motivasyon - İsteklilik':motivasyon}
-subs = st.select_slider(
-    label='Sub Filter:',
-    options=list(sub_dict.keys()),
-)
+
+#subs = st.select_slider(
+#    label='Sub Filter:',
+#    options=list(sub_dict.keys()),
+#)
 
 
 
 
 
-sub_selection = sub_dict[subs]
+#sub_selection = sub_dict[subs]
 
-@st.cache
+#@st.cache
 def plotter(sub_selection):
     if sub_selection.equals(dusunceler):
-        fig, axes = plt.subplots(3,5, figsize=(30,18))
+        fig, axes = plt.subplots(3,5, figsize=(25,20))
         for i, ax in zip(range(13), axes.flat):
-            sns.histplot(ax=ax, x=dusunceler.iloc[:,i], ).set(title=dusunceler.iloc[:,i].name.split('[')[1][:-1], )
-            ax.set(xlabel=None)
-            
-            
+            sns.histplot(ax=ax, x=dusunceler.iloc[:,i], hue=dusunceler.iloc[:,i],legend=False)
+            ax.set_title(dusunceler.iloc[:,i].name.split('[')[1][:-1], wrap=True, loc='center')
+            ax.set(xlabel=None,ylabel='Adet')
+            ax.tick_params(axis='x', rotation=90)
+        fig.subplots_adjust(wspace=5, hspace=1, )
         fig.delaxes(axes[2][3])
         fig.delaxes(axes[2][4])
 
@@ -166,49 +175,67 @@ def plotter(sub_selection):
 
         fig.tight_layout()
         #plt.rcParams['figure.constrained_layout.use'] = True
-        plt.savefig('plots\\dusunceler.png', dpi=50)
+        #plt.savefig('plots\\dusunceler.png', dpi=100)
     elif sub_selection.equals(beceri):
-        fig, axes = plt.subplots(3,5, figsize=(30,16))
+        fig, axes = plt.subplots(3,5, figsize=(25,20))
         for i, ax in zip(range(13), axes.flat):
-            sns.histplot(ax=ax, x=beceri.iloc[:,i], ).set(title=beceri.iloc[:,i].name.split('[')[1][:-1])
-            ax.set(xlabel=None)
+            sns.histplot(ax=ax, x=beceri.iloc[:,i], hue=beceri.iloc[:,i], legend=False)
+            ax.set_title(beceri.iloc[:,i].name.split('[')[1][:-1], wrap=True, loc='center')
+            ax.set(xlabel=None, ylabel='Adet')
+            ax.tick_params(axis='x', rotation=90)
         fig.delaxes(axes[2][3])
         fig.delaxes(axes[2][4])
         fig.tight_layout()
-        plt.savefig('plots\\beceri.png')
+        #plt.savefig('plots\\beceri.png')
     elif sub_selection.equals(motivasyon):
-        fig, axes = plt.subplots(3,3, figsize=(30,16))
+        fig, axes = plt.subplots(3,3, figsize=(25,20))
         for i, ax in zip(range(7), axes.flat):
-            sns.histplot(ax=ax, x=motivasyon.iloc[:,i], ).set(title=motivasyon.iloc[:,i].name.split('[')[1][:-1])
-            ax.set(xlabel=None)
+            sns.histplot(ax=ax, x=motivasyon.iloc[:,i], hue=motivasyon.iloc[:,i], legend=False)
+            ax.set_title(motivasyon.iloc[:,i].name.split('[')[1][:-1], wrap=True, loc='center')
+            ax.set(xlabel=None, ylabel='Adet')
+            ax.tick_params(axis='x', rotation=90)
         fig.delaxes(axes[2][2])
         fig.delaxes(axes[2][1])
         fig.tight_layout()
-        plt.savefig('plots\\motivasyon.png')
+        #plt.savefig('plots\\motivasyon.png')
 
 
 for plot in sub_dict.values():
     plotter(plot)
 
 
-def download_button(path):
-    with open(path, 'rb') as file:
-        st.download_button(
-            label='Download the plot',
-            data=file,
-            file_name=path[5:]
+#def download_button(url):
+#    url
+#    with open(path, 'rb') as file:
+#        st.download_button(
+#            label='Download the plot',
+#            data=file,
+#            file_name=""
+#
+#        )
+dus, bec, mot=st.tabs(['Düşünceler', 'Beceri ve Hazır Bulunuşluk Analizi','Motivasyon - İsteklilik'])
 
-        )
+with dus:
+    st.header('')
+    st.image("https://github.com/comtedartagnan/dashboard-anket/blob/main/plots/dusunceler.png?raw=true")
 
-from PIL import Image
-if sub_selection.equals(dusunceler):
-    path = 'plots\\dusunceler.png'
-elif sub_selection.equals(beceri):
-    path = 'plots\\beceri.png'
-elif sub_selection.equals(motivasyon):
-    path = 'plots\\motivasyon.png'
+with bec:
+    st.header('')
+    st.image("https://github.com/comtedartagnan/dashboard-anket/blob/main/plots/beceri.png?raw=true")
+
+with mot:
+    st.header('')
+    st.image("https://github.com/comtedartagnan/dashboard-anket/blob/main/plots/motivasyon.png?raw=true")
+
+#from PIL import Image
+#if sub_selection.equals(dusunceler):
+#    path = 'plots\\dusunceler.png'
+#elif sub_selection.equals(beceri):
+#    path = 'plots\\beceri.png'
+#elif sub_selection.equals(motivasyon):
+#    path = 'plots\\motivasyon.png'
     
-st.image(Image.open(path))
-download_button(path)
+#st.image(Image.open(path))
+#download_button()
 
 
